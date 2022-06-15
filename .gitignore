@@ -1,0 +1,25 @@
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+.idea
+.DS_Store
+/phpunit.xml
+.phpunit.result.cache
+tests/_support/Helper/Acceptance.php
+tests/_support/Helper/Functional.php
+tests/_support/Helper/Unit.php
+tests/_support/AcceptanceTester.php
+tests/_support/FunctionalTester.php
+tests/_support/UnitTester.php
+tests/acceptance/.gitignore
+tests/functional/.gitignore
+tests/unit/.gitignore
+tests/acceptance.suite.yml
+tests/functional.suite.yml
+tests/unit.suite.yml

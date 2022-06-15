@@ -1,0 +1,34 @@
+# suite config
+suites:
+    api:
+        actor: ApiTester
+        path: .
+        modules:
+            enabled:
+                - REST:
+                    url: &url
+                    depends: PhpBrowser
+            config:
+                PhpBrowser:
+                    url: '%URL%'
+                    headers:
+                        Content-Type: application/json
+                        x-authentication-password: '%INTERNAL_PASSWORD%'
+                        x-instance: '%INSTANCE_TOKEN%'
+        step_decorators:
+            - \Codeception\Step\AsJson
+
+paths:
+    tests: tests
+    output: tests/_output
+    data: tests/_data
+    support: tests/_support
+
+settings:
+    shuffle: false
+    lint: true
+
+params:
+    - .env
+    - .env.test
+    - .env.test.local
