@@ -30,5 +30,16 @@ class BasicTest
         $I->seeResponseContainsJson(["code" => $alternativeCode]);
 
     }
+    public function createGroup(ApiTester $I){
+        $charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $rand_str = '';
+        $desired_length = 10;
+        while (strlen($rand_str) < $desired_length)
+            $rand_str .= substr(str_shuffle($charset), 0, 1);
+        $I->sendPost('/v1/groups', json_encode([
+            "name" => $rand_str,
+        ]));
+    }
+
 
 }
