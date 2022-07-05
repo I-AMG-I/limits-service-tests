@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Tests\api;
+
 use ApiTester;
 use App\Tests\BasicTest;
+
 //require_once 'vendor/autoload.php';
 //$faker = Faker\Factory::create();
 //$username = $faker->name;
@@ -13,6 +15,7 @@ use App\Tests\BasicTest;
 //
 //$username = $faker->name;
 //echo "$username";
+
 /**
  * Cards base class
  */
@@ -20,10 +23,8 @@ class CardsBase extends BasicTest
 
 {
 
-//    protected ?string $testInstanceToken = null;
+  protected ?string $testLIMITToken = null;
     protected ?string $testGROUPToken = null;
-
-
 
 
 //sets random string every time
@@ -34,6 +35,8 @@ class CardsBase extends BasicTest
         $desired_length = 10;
         while (strlen($rand_str) < $desired_length)
             $rand_str .= substr(str_shuffle($charset), 0, 1);
+
+//create random group every time
         $I->sendPost('/v1/groups', json_encode([
             "name" => $rand_str,
         ]));
@@ -45,8 +48,58 @@ class CardsBase extends BasicTest
 //        $this->testInstanceToken = $I->grabDataFromResponseByJsonPath('$.data.token')[0];//0 is the first element
 //        return $this->testInstanceToken;
 
-    }
 
+    }
+    /** Tests if user is able to create a new limit entry for specified group of limits
+     * @group liimts
+     */
+    protected function createLimit(ApiTester $I, $forceRecreate = false): ?string
+    {
+        if ($this->testLIMITToken != null && !$forceRecreate) {
+            return $this->testLIMITToken;
+
+        }
+        //create group
+        $this->ensureGroup($I);
+
+        //create random string for unique name to be created every time
+        $charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $rand_str = '';
+        $rand_str2 = '';
+        $desired_length = 10;
+        while (strlen($rand_str) < $desired_length)
+            $rand_str .= substr(str_shuffle($charset), 0, 1);
+        while (strlen($rand_str2) < $desired_length)
+            $rand_str2 .= substr(str_shuffle($charset), 0, 1);
+
+        //this should be successful
+        $I->sendPost("/v1/groups/$this->testGROUPToken/limits", json_encode([
+            "operation" => $rand_str
+        ]));
+
+        //create random second string for unique name to be created every time
+
+        $I->sendPost("/v1/groups/$this->testGROUPToken/limits", json_encode([
+            "operation" => $rand_str2
+        ]));
+
+        $this->checkDefaultResponse($I);
+        $I->seeResponseCodeIsSuccessful();
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+
+            'code' => 'integer',
+            'data' => [
+                "token" => 'string'
+            ]
+
+
+        ]);
+
+// saved for later
+        $this->testLIMITToken = $I->grabDataFromResponseByJsonPath('$.data.token')[0];
+
+        return $this->testLIMITToken;
 //    /**
 //     * Generic test data
 //     * @var array
@@ -95,5 +148,5 @@ class CardsBase extends BasicTest
 //    }
 
 
-}
+}}
 
