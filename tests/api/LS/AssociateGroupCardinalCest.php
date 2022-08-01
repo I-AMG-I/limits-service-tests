@@ -6,8 +6,10 @@ use App\Tests\api\CardsBase;
 use ApiTester;
 use phpDocumentor\Reflection\Types\Boolean;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertJson;
 use function PHPUnit\Framework\assertJsonStringEqualsJsonString;
 use function PHPUnit\Framework\assertNotNull;
+use function PHPUnit\Framework\assertStringMatchesFormat;
 
 /** Tests if user is able to associate group to instance and/or merchant or user
  * @group associateandremove
