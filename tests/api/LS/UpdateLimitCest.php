@@ -142,7 +142,7 @@ class UpdateLimitCest extends CardsBase
     }
 
     /** Tests if user is able to update a limit of all fields and then update only one field with changing the others
-     * @group updatelimitOneField
+     * @group updateLimitOneField
      */
 
 
@@ -206,11 +206,11 @@ class UpdateLimitCest extends CardsBase
         //list current limit to see if data is properly recorded
         $I->sendGet("/v1/limits/$this->testLIMITToken");
         //see if only operation is changed and other should be null
-        $I->seeResponseMatchesJsonType([
+        $I->dontSeeResponseMatchesJsonType([
 
             "data" => [
-//                "operation" => 'string',
-                "currency" => 'string',
+               // "operation" => 'string',
+                  "currency" => 'string',
                 "single_operation_limit" => 'integer',
                 "daily_limit" => 'integer',
                 "daily_operation_count" => 'integer',
