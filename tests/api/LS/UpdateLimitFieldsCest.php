@@ -103,7 +103,7 @@ class UpdateLimitFieldsCest extends CardsBase
 
     }
     /** Tests if user is able to update a limit with more than 255 char
-     * @group limit255
+     * @group limit256
      */
 
 
@@ -112,20 +112,14 @@ class UpdateLimitFieldsCest extends CardsBase
         //create limit
         $this->createLimit($I);
 
-        // this should be successful
+        // this should not be successful
         $params = [
             "operation" => "georgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTestgeorgiTest"
 
         ];
 
         // test if user is able to update limit
-        $I->sendPatch("/v1/limits/$this->testLIMITToken", $params);
-        $this->checkDefaultResponse($I);
-
-
-
-        // test if user is able to load money with 0 amount
-        $I->sendPatch("/v1/limits/$this->testLIMITToken", $params);
+        $I->sendPut("/v1/limits/$this->testLIMITToken", $params);
         $this->checkDefaultResponse($I, 11001);
         $I->seeResponseMatchesJsonType([
 
@@ -134,8 +128,8 @@ class UpdateLimitFieldsCest extends CardsBase
 
 
         ]);
-        $details = $I->grabDataFromResponseByJsonPath('$.errors.name')[0]; //0 is the first element
-        assertEquals($details, 'This value is not valid.');
+        $details = $I->grabDataFromResponseByJsonPath('$.errors.operation')[0]; //0 is the first element
+        assertEquals($details, 'Value should not be more than 255');
         print_r($details);
 
 
